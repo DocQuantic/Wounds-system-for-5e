@@ -1,0 +1,49 @@
+.dnd5e.sheet.actor .ability-scores .ability .wound-button {
+    left: 2px;
+    top: 28px;
+    position: absolute;
+    display: block;
+}
+
+.dnd5e.sheet.actor .wound-button {
+    color: #4b4a44;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+a.wound-button:hover{
+    text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+
+.form-header-wound {
+    margin: 0 0 0.25em 0;
+    padding: 2px 0;
+    border-top: 2px groove #eeede0;
+    border-bottom: 2px groove #eeede0;
+    font-family: "Modesto Condensed", "Palatino Linotype", serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+form .form-group-wound {
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 3px 0;
+    align-items: center;
+}
+
+.form-group-wound label {
+    flex: 2;
+    color: #4b4a44;
+    font-weight: bold;
+}
+
+.form-group-wound input[type="number"] {
+  height: calc(100% - 2px);
+  width: 50px;
+  border: 1px solid #7a7971;
+  background: rgba(0, 0, 0, 0.05);
+  color: #191813;
+}

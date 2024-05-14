@@ -1,0 +1,17 @@
+<form style="z-index: 103;width: 265px;height: 413px;left: 192.5px;top: 217px;">
+    <h3 class="form-header-wound">Capacité : {{ability}}</h3>
+    <div class="form-group-wound">
+        <label>Est blessé ?</label>
+        <input type="checkbox" name="isWounded" title="Est blessée ?" data-dtype="Boolean" {{checked isWounded}}/>
+    </div>
+    <div class="form-group-wound">
+        <label>Jours avant guérison : </label>
+
+        <input type="number" step ="1" name="daysToHeal" value="{{daysToHeal}}"/>
+    </div>
+    <footer class="sheet-footer flexrow">
+        <button class="dialog-button" type="submit" name="submit">
+            <i class="fa fa-check"></i> OK
+        </button>
+    </footer>
+</form>

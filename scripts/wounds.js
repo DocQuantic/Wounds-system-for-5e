@@ -65,7 +65,7 @@ Hooks.on('renderActorSheet', (actorSheet, html, data) => {
   actor = actorSheet.actor
   
   if(actor.type=='character'){
-    const abilityItem = html.find(`[class="ability "]`);
+    const abilityItem = html.find(`[class="ability-score "]`);
 
     abilityItem.append(
       "<a class='wound-button' data-action='wound'><i class='fas fa-heartbeat'></i></a>"

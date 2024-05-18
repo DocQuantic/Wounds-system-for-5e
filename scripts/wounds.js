@@ -22,7 +22,7 @@ class WoundConfig extends FormApplication {
     const overrides = {
       height: 'auto',
       id: 'wound-conf',
-      template: "modules/RoleNPlay_fvtt_5e_extra_rules/templates/wounds.hbs",
+      template: "modules/Wounds-system-for-5e/templates/wounds.hbs",
       title: 'Configuration des blessures',
       closeOnSubmit: false,
       submitOnChange: true
@@ -72,7 +72,7 @@ Hooks.on('renderActorSheet', (actorSheet, html, data) => {
     );
 
     html.on('click', '.wound-button', (event) => {      
-      let ability =  event.target.closest("li.ability").dataset.ability;
+      let ability =  event.target.closest("div.ability-score").dataset.ability;
       let flagIsWounded = 'flags.wounds5e.' + ability + '.isWounded';
       let flagDaysToHeal = 'flags.wounds5e.' + ability + '.daysToHeal';
       

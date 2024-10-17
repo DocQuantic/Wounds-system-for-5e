@@ -41,9 +41,14 @@ form .form-group-wound {
 }
 
 .form-group-wound input[type="number"] {
-  height: calc(100% - 2px);
-  width: 50px;
-  border: 1px solid #7a7971;
-  background: rgba(0, 0, 0, 0.05);
-  color: #191813;
+    height: calc(100% - 2px);
+    width: 50px;
+    border: 1px solid #7a7971;
+    background: rgba(0, 0, 0, 0.05);
+    color: #191813;
+}
+
+.wounded-warning{
+    color: red;
+    text-align: center;
 }

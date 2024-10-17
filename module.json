@@ -2,26 +2,22 @@
   "id": "Wounds-system-for-5e",
   "title": "Wounds 5e",
   "description": "A simple module which adds support for the wounds rule introduced by Role'N Play.",
-  "version": "#{VERSION}#",
+  "version": 1,
   "library": "false",
-  "manifestPlusVersion": "1.2.0",
+  "flags": {
+    "manifestPlusVersion": "1.2.0",
+    "system": ["dnd5e"]
+  },
   "compatibility": {
-    "minimum": 10,
-    "verified": 10,
-    "maximum": 11
+    "minimum": 11,
+    "verified": 12,
+    "maximum": 12
   },
   "authors": [
     {
       "name": "DocQuantic"
     }
   ],
-  "system": ["dnd5e"],
-  "relationships": {
-    "requires": [{
-      "id": "midi-qol",
-      "type": "module"
-    }]
-  },
   "scripts": [
     "scripts/wounds.js"
   ],

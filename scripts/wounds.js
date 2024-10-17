@@ -7,6 +7,10 @@ let abilityDict = {
   "cha": { Name: "Charisme"}
 }
 
+let isWoundedRoll = false;
+let rollType = "Skill";
+let winHeight = '220px';
+
 class WoundConfig extends FormApplication {
   constructor(actor, ability, isWounded, daysToHeal) {
     super();
@@ -61,8 +65,13 @@ class WoundConfig extends FormApplication {
   }
 }
 
+Hooks.once("init", function() {
+  CONFIG.debug.hooks = true;
+});
+
 Hooks.on('renderActorSheet', (actorSheet, html, data) => {
   actor = actorSheet.actor
+  console.log(html);
   
   if(actor.type=='character'){
     const abilityItem = html.find(`[class="ability-score "]`);
@@ -76,11 +85,10 @@ Hooks.on('renderActorSheet', (actorSheet, html, data) => {
       let flagIsWounded = 'flags.wounds5e.' + ability + '.isWounded';
       let flagDaysToHeal = 'flags.wounds5e.' + ability + '.daysToHeal';
       
-      new WoundConfig(actor, ability, getProperty(actor, flagIsWounded), getProperty(actor, flagDaysToHeal)).render(true)
+      new WoundConfig(actor, ability, foundry.utils.getProperty(actor, flagIsWounded), foundry.utils.getProperty(actor, flagDaysToHeal)).render(true)
     });
   }
 });
-
 
 Hooks.on('preCreateActor', (actor, data, options, userId) => {
   if (actor.type === 'character') {
@@ -96,8 +104,8 @@ Hooks.on('preCreateActor', (actor, data, options, userId) => {
 Hooks.on('dnd5e.preRestCompleted', (actor, data) => {
   if(data["newDay"]==true){
     Object.keys(abilityDict).forEach(function(key) {
-      let newDaysToHeal = getProperty(actor, 'flags.wounds5e.' + key + '.daysToHeal')-1;
-      let isWounded = getProperty(actor, 'flags.wounds5e.' + key + '.isWounded');
+      let newDaysToHeal = foundry.utils.getProperty(actor, 'flags.wounds5e.' + key + '.daysToHeal')-1;
+      let isWounded = foundry.utils.getProperty(actor, 'flags.wounds5e.' + key + '.isWounded');
 
       if(newDaysToHeal==0){
         isWounded=false;
@@ -116,6 +124,58 @@ Hooks.on('dnd5e.preRestCompleted', (actor, data) => {
   }
 })
 
-Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
-  registerPackageDebugFlag(ToDoList.ID);
-});
+Hooks.on('dnd5e.preRollAbilityTest', (actor, data, ability) => {
+  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + ability + '.isWounded');
+  rollType = "abilityTest";
+})
+
+Hooks.on('dnd5e.preRollAbilitySave', (actor, data, ability) => {
+  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + ability + '.isWounded');
+  rollType = "abilitySave";
+})
+
+Hooks.on('dnd5e.preRollSkill', (actor, data) => {
+  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + data.data.defaultAbility + '.isWounded');
+  rollType = "Skill";
+})
+
+Hooks.on('renderDialog', (Dialog, html) => {
+  if(isWoundedRoll){
+    const dialogContent = html.find(`[class="dialog-content"]`);
+    let disButton = document.getElementsByClassName("disadvantage")[0];
+    let normButton = document.getElementsByClassName("normal")[0];
+
+    switch (rollType){
+      case "abilityTest":
+        winHeight = '220px';
+        break;
+      case "abilitySave":
+        winHeight = '220px';
+        break;
+      case "Skill":
+        winHeight = '250px';
+        break;   
+      default:
+        console.log("Error selecting window");     
+    }
+
+    let dialogWindow = document.getElementsByClassName("app window-app dialog")[0];
+
+  
+    dialogContent.append(
+      "<div class=wounded-warning><p>Attention, cette capacité et blessée, il faut lancer avec désavantage !</p></div>"
+    );
+
+    dialogWindow.style.height = winHeight;
+
+    normButton.classList.remove("default");
+    normButton.classList.remove("bright");
+
+    disButton.classList.add("default");
+    disButton.classList.add("bright");
+    disButton.focus();
+  }
+  isWoundedRoll=false;
+})
+
+

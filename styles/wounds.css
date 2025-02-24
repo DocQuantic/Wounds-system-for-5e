@@ -51,4 +51,5 @@ form .form-group-wound {
 .wounded-warning{
     color: red;
     text-align: center;
+    font-weight: 700;
 }

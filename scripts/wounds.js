@@ -124,50 +124,33 @@ Hooks.on('dnd5e.preRestCompleted', (actor, data) => {
   }
 })
 
-Hooks.on('dnd5e.preRollAbilityTest', (actor, data, ability) => {
-  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + ability + '.isWounded');
-  rollType = "abilityTest";
+Hooks.on('dnd5e.preRollAbilityCheckV2', (data) => {
+  console.log(data)
+  isWoundedRoll = foundry.utils.getProperty(data.subject, 'flags.wounds5e.' + data.ability + '.isWounded');
+  rollType = "abilityCheck";
 })
 
-Hooks.on('dnd5e.preRollAbilitySave', (actor, data, ability) => {
-  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + ability + '.isWounded');
+Hooks.on('dnd5e.preRollSavingThrowV2', (data) => {
+  isWoundedRoll = foundry.utils.getProperty(data.subject, 'flags.wounds5e.' + data.ability + '.isWounded');
   rollType = "abilitySave";
 })
 
-Hooks.on('dnd5e.preRollSkill', (actor, data) => {
-  isWoundedRoll = foundry.utils.getProperty(actor, 'flags.wounds5e.' + data.data.defaultAbility + '.isWounded');
-  rollType = "Skill";
-})
-
-Hooks.on('renderDialog', (Dialog, html) => {
+Hooks.on('renderDialog5e', (Dialog, html) => {
   if(isWoundedRoll){
-    const dialogContent = html.find(`[class="dialog-content"]`);
-    let disButton = document.getElementsByClassName("disadvantage")[0];
-    let normButton = document.getElementsByClassName("normal")[0];
+    const dialogContent = document.getElementsByClassName("rolls")[0];
+    const dialog = document.getElementsByClassName("roll-configuration")[0];
+    const buttons = dialog.getElementsByTagName("button")
+    console.log(buttons)
+    
+    let disButton = buttons[4];
+    let normButton = buttons[3];
 
-    switch (rollType){
-      case "abilityTest":
-        winHeight = '220px';
-        break;
-      case "abilitySave":
-        winHeight = '220px';
-        break;
-      case "Skill":
-        winHeight = '250px';
-        break;   
-      default:
-        console.log("Error selecting window");     
-    }
-
-    let dialogWindow = document.getElementsByClassName("app window-app dialog")[0];
-
-  
-    dialogContent.append(
-      "<div class=wounded-warning><p>Attention, cette capacité et blessée, il faut lancer avec désavantage !</p></div>"
-    );
-
-    dialogWindow.style.height = winHeight;
-
+    var newDiv = document.createElement("div");
+    var newContent = document.createTextNode("Cette caractéristique est blessée. Il faut lancer le dé avec désavantage");
+    newDiv.appendChild(newContent);
+    newDiv.classList.add("wounded-warning")
+    dialogContent.appendChild(newDiv)
+    
     normButton.classList.remove("default");
     normButton.classList.remove("bright");
 

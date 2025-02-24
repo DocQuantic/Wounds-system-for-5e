@@ -2,7 +2,7 @@
   "id": "Wounds-system-for-5e",
   "title": "Wounds 5e",
   "description": "A simple module which adds support for the wounds rule introduced by Role'N Play.",
-  "version": 1,
+  "version": 1.4,
   "library": "false",
   "flags": {
     "manifestPlusVersion": "1.2.0",

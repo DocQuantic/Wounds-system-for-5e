@@ -69,24 +69,31 @@ Hooks.once("init", function() {
   CONFIG.debug.hooks = true;
 });
 
-Hooks.on('renderActorSheet', (actorSheet, html, data) => {
-  actor = actorSheet.actor
-  console.log(html);
+Hooks.on('renderActorSheetV2', (actorSheet, html, data) => {
+  actor = actorSheet.actor;
   
   if(actor.type=='character'){
-    const abilityItem = html.find(`[class="ability-score "]`);
+    const abilityItems = html.querySelectorAll(".ability-score");
 
-    abilityItem.append(
-      "<a class='wound-button' data-action='wound'><i class='fas fa-heartbeat'></i></a>"
-    );
+    abilityItems.forEach((item) => {
+      const element = document.createElement("a");
+      element.classList.add("wound-button");
+      element.setAttribute("data-action", "wound");
 
-    html.on('click', '.wound-button', (event) => {      
-      let ability =  event.target.closest("div.ability-score").dataset.ability;
-      let flagIsWounded = 'flags.wounds5e.' + ability + '.isWounded';
-      let flagDaysToHeal = 'flags.wounds5e.' + ability + '.daysToHeal';
-      
-      new WoundConfig(actor, ability, foundry.utils.getProperty(actor, flagIsWounded), foundry.utils.getProperty(actor, flagDaysToHeal)).render(true)
-    });
+      const content = document.createElement("i");
+      content.classList.add("fas", "fa-heartbeat");
+
+      element.appendChild(content);
+      element.addEventListener("click", (event) => {
+        let ability =  event.target.closest("div.ability-score").dataset.ability;
+        let flagIsWounded = 'flags.wounds5e.' + ability + '.isWounded';
+        let flagDaysToHeal = 'flags.wounds5e.' + ability + '.daysToHeal';
+        
+        new WoundConfig(actor, ability, foundry.utils.getProperty(actor, flagIsWounded), foundry.utils.getProperty(actor, flagDaysToHeal)).render(true)
+      })
+
+      item.appendChild(element)
+    })
   }
 });
 
@@ -160,5 +167,4 @@ Hooks.on('renderDialog5e', (Dialog, html) => {
   }
   isWoundedRoll=false;
 })
-
 
